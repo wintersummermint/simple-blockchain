@@ -33,6 +33,22 @@ class Blockchain {
         newBlock.hash = newBlock.calculateHash();
         this.chain.push(newBlock);
     }
+
+    isChainValid() {
+        for (let i = 1; i < this.chain.length; i++) {
+            const currentBlock = this.chain[i];
+            const previousBlock = this.chain[i - 1];
+            if (currentBlock.hash!== currentBlock.calculateHash()) {
+                return false;
+            }
+
+            if (currentBlock.previousHash !== previousBlock.hash) {
+                return false;
+            };
+        
+        }
+        return true;
+    }
 }
 
 class Wallet {
@@ -67,6 +83,8 @@ ganttSparkChain.addBlock(new Block(2, '04/06/2023', {type : 'send', from : '0xNi
 ganttSparkChain.addBlock(new Block(3, '04/07/2023', {type : 'send', from : '0xKyle', to: '0xNixon', amount : 20}));
 
 console.log(JSON.stringify(ganttSparkChain, null, 4));
+console.log(`Is Blockchain valid? ${ganttSparkChain.isChainValid()}`);
+
 let wallet = new Wallet();
 
 console.log(wallet.getBalance(ganttSparkChain, '0xKyle'));
